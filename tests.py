@@ -1,5 +1,6 @@
 import unittest
 from functions.get_files_info import get_files_info
+from functions.get_file_content import get_file_content
 
 
 class TestGetFilesInfo(unittest.TestCase):
@@ -50,6 +51,38 @@ class TestGetFilesInfo(unittest.TestCase):
     #     self.assertEqual(result, expected)
 
     # TODO prevent using working directories that are outside the package
+
+
+class TestGetFileContent(unittest.TestCase):
+    def test_existing(self):
+        result = get_file_content(".", ".python-version")
+        self.assertTrue(result.startswith("3."))
+        self.assertTrue(result.endswith("\n"))
+        self.assertTrue(3 <= len(result) <= 9)
+
+    def test_non_existing(self):
+        filename = "fake_file"
+        result = get_file_content("calculator", filename)
+        expected = f'Error: File not found or is not a regular file: "{filename}"'
+        self.assertEqual(result, expected)
+
+    def test_outside_absolute(self):
+        result = get_file_content("calculator", "/bin/main.py")
+        expected = 'Error: Cannot read "/bin/main.py" as it is outside the permitted working directory'
+        self.assertEqual(result, expected)
+
+    def test_outside_relative(self):
+        result = get_file_content("calculator", "../main.py")
+        expected = 'Error: Cannot read "../main.py" as it is outside the permitted working directory'
+        self.assertEqual(result, expected)
+
+    # TODO create a test TXT for this, needs to override the MAX_LENGTH
+    # def test_truncated(self):
+    #     # set MAX_LENGTH to 3
+    #     file_path = ".python-version"
+    #     result = get_file_content(".", file_path)
+    #     expected = f'3.1[...File "{file_path}" truncated at 3 characters]'
+    #     self.assertEqual(result, expected)
 
 
 if __name__ == "__main__":
