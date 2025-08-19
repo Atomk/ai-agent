@@ -1,6 +1,6 @@
 import os
 
-def get_files_info(working_diectorry, directory="") -> str:
+def get_files_info(working_directory, directory="") -> str:
     """Returns a string representation of the contents of a directory.
 
     - working_directory: relative path from cwd to a project directory
@@ -9,8 +9,8 @@ def get_files_info(working_diectorry, directory="") -> str:
     On failure, returns the error as a string.
     """
     # Prevent accessing anything outside of the working directory
-    workdir_abspath = os.path.abspath(working_diectorry)
-    subdir_abspath = os.path.abspath(os.path.join(working_diectorry, directory))
+    workdir_abspath = os.path.abspath(working_directory)
+    subdir_abspath = os.path.abspath(os.path.join(working_directory, directory))
 
     if not subdir_abspath.startswith(workdir_abspath):
         return f'Error: Cannot list "{directory}" as it is outside the permitted working directory'
