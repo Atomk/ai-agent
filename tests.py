@@ -1,6 +1,8 @@
+import os
 import unittest
 from functions.get_files_info import get_files_info
 from functions.get_file_content import get_file_content
+from functions.write_file import write_file
 
 
 class TestGetFilesInfo(unittest.TestCase):
@@ -83,6 +85,76 @@ class TestGetFileContent(unittest.TestCase):
     #     result = get_file_content(".", file_path)
     #     expected = f'3.1[...File "{file_path}" truncated at 3 characters]'
     #     self.assertEqual(result, expected)
+
+
+class TestWriteFile(unittest.TestCase):
+    def _remove_if_exists(self, dir, rel_path):
+        abspath = os.path.abspath(os.path.join(dir, rel_path))
+        if os.path.exists(abspath):
+            os.remove(abspath)
+
+    def _exists(self, dir, rel_path) -> bool:
+        abspath = os.path.abspath(os.path.join(dir, rel_path))
+        return os.path.exists(abspath)
+
+    def test_not_a_file(self):
+        result = write_file(".", ".", "TEST ERROR")
+        self.assertEqual(result, f'Error: "." exists but it\'s not a regular file')
+
+    def test_create_and_overwrite(self):
+        wd = "."
+        file_path = "__test_file"
+        content = "Test file created successfully!"
+        # Ensure file does not exist before the test
+        self._remove_if_exists(wd, file_path)
+        result = write_file(wd, file_path, content)
+        self.assertEqual(
+            result,  f'Successfully wrote to "{file_path}" (31 characters written)'
+        )
+        self.assertEqual(get_file_content(wd, file_path), content)
+
+        # Overwrite
+        content_new = "Content was overwritten!"
+        result = write_file(wd, file_path, content_new)
+        self.assertEqual(
+            result, f'Successfully wrote to "{file_path}" (24 characters written)'
+        )
+        self.assertEqual(get_file_content(wd, file_path), content_new)
+        # Delete test file
+        self._remove_if_exists(wd, file_path)
+
+    def test_create_in_existing_subdir(self):
+        wd = "calculator"
+        file_path = "__test_file"
+        content = "Test file created successfully!"
+        # Ensure file does not exist before the test
+        self._remove_if_exists(wd, file_path)
+        result = write_file(wd, file_path, content)
+        self.assertEqual(
+            result,  f'Successfully wrote to "{file_path}" (31 characters written)'
+        )
+        self.assertEqual(get_file_content(wd, file_path), content)
+        # Delete test file
+        self._remove_if_exists(wd, file_path)
+
+    # TODO: function should actually create the necessary subdirectories
+    def test_create_in_nonexistent_subdir(self):
+        wd = "__new_subdir"
+        file_path = "__test_file"
+        content = "Test file created successfully!"
+        result = write_file(wd, file_path, content)
+        self.assertTrue(result.startswith("Error: cannot write to file"))
+        self.assertFalse(self._exists(wd, file_path))
+
+    def test_outside_absolute(self):
+        result = write_file("calculator", "/bin/main.py", "TEST ERROR")
+        expected = 'Error: Cannot write to "/bin/main.py" as it is outside the permitted working directory'
+        self.assertEqual(result, expected)
+
+    def test_outside_relative(self):
+        result = write_file("calculator", "../main.py", "TEST ERROR")
+        expected = 'Error: Cannot write to "../main.py" as it is outside the permitted working directory'
+        self.assertEqual(result, expected)
 
 
 if __name__ == "__main__":
