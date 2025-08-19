@@ -13,3 +13,9 @@ The agent needs some project to work on, so Boot.dev provides a calculator packa
     ```sh
     uv run main.py "3 + 5"
     ```
+
+### Run tests
+
+```sh
+uv run tests.py
+```
