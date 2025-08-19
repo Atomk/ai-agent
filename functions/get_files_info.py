@@ -17,11 +17,15 @@ def get_files_info(working_diectorry, directory="") -> str:
     if not os.path.isdir(subdir_abspath):
         return f'Error: "{directory}" is not a directory'
 
-    lines = []
-    for filename in os.listdir(subdir_abspath):
-        filepath = os.path.join(subdir_abspath, filename)
-        size = os.path.getsize(filepath)
-        is_dir = os.path.isdir(filepath)
-        lines.append(f"- {filename}: file_size={size} bytes, is_dir={is_dir}")
+    try:
+        lines = []
+        for filename in os.listdir(subdir_abspath):
+            filepath = os.path.join(subdir_abspath, filename)
+            size = os.path.getsize(filepath)
+            is_dir = os.path.isdir(filepath)
+            lines.append(f"- {filename}: file_size={size} bytes, is_dir={is_dir}")
 
-    return "\n".join(lines)
+        return "\n".join(lines)
+    except Exception as exc:
+        # Allow the agent to handle unexpected errors instead of crashing
+        return f"Error: cannot list contents: {exc}"
