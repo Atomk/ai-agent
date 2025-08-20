@@ -3,6 +3,7 @@ import unittest
 from functions.get_files_info import get_files_info
 from functions.get_file_content import get_file_content
 from functions.write_file import write_file
+from functions.run_python import run_python_file
 
 
 class TestGetFilesInfo(unittest.TestCase):
@@ -154,6 +155,45 @@ class TestWriteFile(unittest.TestCase):
     def test_outside_relative(self):
         result = write_file("calculator", "../main.py", "TEST ERROR")
         expected = 'Error: Cannot write to "../main.py" as it is outside the permitted working directory'
+        self.assertEqual(result, expected)
+
+
+class TestRunPythonFile(unittest.TestCase):
+    def test_non_existing(self):
+        filename = "fake_file"
+        result = run_python_file("calculator", filename)
+        expected = f'Error: File "{filename}" not found.'
+        self.assertEqual(result, expected)
+
+    def test_not_a_python_file(self):
+        filename = "pyproject.toml"
+        result = run_python_file(".", filename)
+        expected = f'Error: "{filename}" is not a Python file.'
+        self.assertEqual(result, expected)
+
+        # TODO test a directory named "something.py", should give same result
+
+    def test_execution_failure(self):
+        result = run_python_file("calculator", "main.py", [1234])
+        self.assertTrue(result.startswith("Error: executing Python file: expected str"))
+        self.assertTrue("STDOUT" not in result)
+        self.assertTrue("STDERR" not in result)
+
+    def test_execute_stdout_only(self):
+        result = run_python_file("calculator", "main.py", ["13 * 7"])
+        self.assertTrue(result.startswith("STDOUT"))
+        self.assertTrue("STDERR" not in result)
+        self.assertTrue(" 13 * 7 " in result)
+        self.assertTrue(" 91 " in result)
+
+    def test_outside_absolute(self):
+        result = run_python_file("calculator", "/bin/main.py")
+        expected = 'Error: Cannot execute "/bin/main.py" as it is outside the permitted working directory'
+        self.assertEqual(result, expected)
+
+    def test_outside_relative(self):
+        result = run_python_file("calculator", "../main.py")
+        expected = 'Error: Cannot execute "../main.py" as it is outside the permitted working directory'
         self.assertEqual(result, expected)
 
 
