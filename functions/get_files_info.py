@@ -20,6 +20,8 @@ def get_files_info(working_directory, directory="") -> str:
     try:
         lines = []
         for filename in os.listdir(subdir_abspath):
+            if filename == "__pycache__":
+                continue
             filepath = os.path.join(subdir_abspath, filename)
             size = os.path.getsize(filepath)
             is_dir = os.path.isdir(filepath)
