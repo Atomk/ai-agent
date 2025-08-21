@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 
+from config import MODEL_ID
 from functions.get_files_info import schema_get_file_info
 from functions.get_file_content import schema_get_file_content
 from functions.run_python import schema_run_python_file
@@ -41,7 +42,6 @@ def main():
         ]
     )
 
-    MODEL = "gemini-2.0-flash-001"
     system_prompt = """
     You are a helpful AI coding agent.
 
@@ -55,7 +55,7 @@ def main():
     All paths you provide should be relative to the working directory. You do not need to specify the working directory in your function calls as it is automatically injected for security reasons.
     """
     response = client.models.generate_content(
-        model=MODEL,
+        model=MODEL_ID,
         contents=messages,
         config=types.GenerateContentConfig(
             tools=[available_functions],

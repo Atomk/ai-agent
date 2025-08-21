@@ -2,6 +2,8 @@ import os
 import subprocess
 from google.genai import types
 
+from config import SUBCOMMAND_TIMEOUT_SECONDS
+
 
 def run_python_file(
     working_directory: str,
@@ -32,7 +34,7 @@ def run_python_file(
         completed_process = subprocess.run(
             command_parts,
             capture_output=True,
-            timeout= 30,
+            timeout=SUBCOMMAND_TIMEOUT_SECONDS,
         )
     except Exception as exc:
         return f"Error: executing Python file: {exc}"

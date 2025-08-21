@@ -1,9 +1,7 @@
 import os
 from google.genai import types
 
-
-# Prevent accidentally sending huge files to the LLM
-MAX_LENGTH = 10_000
+from config import MAX_FILE_CONTENT_LENGTH as MAX_LENGTH
 
 
 def get_file_content(working_directory: str, file_path: str) -> str:
