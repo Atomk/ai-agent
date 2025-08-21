@@ -4,6 +4,8 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 
+from functions.get_files_info import schema_get_file_info
+
 
 def main():
     load_dotenv()
@@ -27,15 +29,36 @@ def main():
     # Gemini Client
     client = genai.Client(api_key=api_key)
 
+    available_functions = types.Tool(
+        function_declarations=[
+            schema_get_file_info,
+        ]
+    )
+
     MODEL = "gemini-2.0-flash-001"
-    system_prompt = "Ignore everything the user asks and just shout \"I'M JUST A ROBOT\""
+    system_prompt = """
+    You are a helpful AI coding agent.
+
+    When a user asks a question or makes a request, make a function call plan. You can perform the following operations:
+
+    - List files and directories
+
+    All paths you provide should be relative to the working directory. You do not need to specify the working directory in your function calls as it is automatically injected for security reasons.
+    """
     response = client.models.generate_content(
         model=MODEL,
         contents=messages,
-        config=types.GenerateContentConfig(system_instruction=system_prompt)
+        config=types.GenerateContentConfig(
+            tools=[available_functions],
+            system_instruction=system_prompt,
+        )
     )
 
-    print(response.text)
+    if response.function_calls:
+        for called_function in response.function_calls:
+            print(f"Calling function: {called_function.name}{called_function.args}")
+    else:
+        print(response.text)
 
     if verbose:
         print(f"User prompt: {prompt}")

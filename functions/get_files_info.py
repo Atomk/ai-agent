@@ -1,4 +1,6 @@
 import os
+from google.genai import types
+
 
 def get_files_info(working_directory, directory="") -> str:
     """Returns a string representation of the contents of a directory.
@@ -31,3 +33,20 @@ def get_files_info(working_directory, directory="") -> str:
     except Exception as exc:
         # Allow the agent to handle unexpected errors instead of crashing
         return f"Error: cannot list contents: {exc}"
+
+
+# The `working_directory` is intentionally not listed as we won't allow the AI to specify that.
+# The working directory will be hardcoded as a security measure.
+schema_get_file_info = types.FunctionDeclaration(
+    name="get_files_info",
+    description="Lists files in the specified directory along with their sizes, constrained to the working directory.",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "directory": types.Schema(
+                type=types.Type.STRING,
+                description="The directory to list files from, relative to the working directory. If not provided, lists files in the working directory itself.",
+            )
+        }
+    )
+)
