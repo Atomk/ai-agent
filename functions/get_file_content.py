@@ -1,4 +1,5 @@
 import os
+from google.genai import types
 
 
 # Prevent accidentally sending huge files to the LLM
@@ -34,3 +35,19 @@ def get_file_content(working_directory: str, file_path: str) -> str:
     except Exception as exc:
         # Allow the agent to handle unexpected errors instead of crashing
         return f"Error: cannot read file: {exc}"
+
+
+# The `working_directory` is intentionally not listed as we won't allow the AI to specify that argument.
+schema_get_file_content = types.FunctionDeclaration(
+    name="get_file_content",
+    description="Get the contents of the specified file as a string. The file is constrained to the working directory.",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="The file to read, specified as a path relative to the working directory.",
+            )
+        }
+    )
+)

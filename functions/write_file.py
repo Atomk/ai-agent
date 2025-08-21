@@ -1,4 +1,6 @@
 import os
+from google.genai import types
+
 
 def write_file(
     working_directory: str,
@@ -28,3 +30,27 @@ def write_file(
         return f'Successfully wrote to "{file_path}" ({len(content)} characters written)'
     except Exception as exc:
         return f'Error: cannot write to file "{file_path}": {exc}'
+
+
+# The `working_directory` is intentionally not listed as we won't allow the AI to specify that argument.
+schema_write_file = types.FunctionDeclaration(
+    name="write_file",
+    description=(
+        "Write the provided content to the specified file."
+        " The file is constrained to the working directory."
+        " If the file already exists, it will be overwritten."
+    ),
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="The file to write to, specified as a path relative to the working directory.",
+            ),
+            "content": types.Schema(
+                type=types.Type.STRING,
+                description="The content to write to the file.",
+            )
+        }
+    )
+)

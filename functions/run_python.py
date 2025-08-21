@@ -1,5 +1,6 @@
 import os
 import subprocess
+from google.genai import types
 
 
 def run_python_file(
@@ -47,3 +48,27 @@ def run_python_file(
         lines.append("No output produced.")
 
     return "\n".join(lines)
+
+
+# The `working_directory` is intentionally not listed as we won't allow the AI to specify that argument.
+schema_run_python_file = types.FunctionDeclaration(
+    name="run_python_file",
+    description="Execute the specified script file, optionally providing command.line arguments to it. The file is constrained to the working directory.",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="The script file to execute, specified as a path relative to the working directory.",
+            ),
+            "args": types.Schema(
+                type=types.Type.ARRAY,
+                items=types.Schema(
+                    type=types.Type.STRING,
+                    description="A single CLI argument to be passed to the script.",
+                ),
+                description="List of CLI arguments to pass to the script. If not provided, it means that no CLI arguments is needed. ",
+            ),
+        }
+    )
+)
