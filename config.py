@@ -6,3 +6,7 @@ SUBCOMMAND_TIMEOUT_SECONDS = 30
 # Limits the number of characters that the agent can read from a file.
 # Prevents accidentally sending huge files to the LLM.
 MAX_FILE_CONTENT_LENGTH = 10_000
+
+WORKING_DIRECTORY = "./calculator"
+"""The functions executed by the agent should be able to access
+only files and subdirectories located within this directory."""

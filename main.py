@@ -4,11 +4,60 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 
-from config import MODEL_ID
-from functions.get_files_info import schema_get_file_info
-from functions.get_file_content import schema_get_file_content
-from functions.run_python import schema_run_python_file
-from functions.write_file import schema_write_file
+from config import MODEL_ID, WORKING_DIRECTORY
+from functions.get_files_info import get_files_info, schema_get_file_info
+from functions.get_file_content import get_file_content, schema_get_file_content
+from functions.run_python import run_python_file, schema_run_python_file
+from functions.write_file import write_file, schema_write_file
+
+
+def call_function(
+    function_call_part: types.FunctionCall,
+    verbose=False,
+) -> types.Content:
+    if verbose:
+        print(f"Calling function: {function_call_part.name}({function_call_part.args})")
+    else:
+        print(f" - Calling function: {function_call_part.name}")
+
+    function_name = function_call_part.name
+    if function_name is None:
+        return types.Content(
+            role="tool",
+            parts=[
+                types.Part.from_function_response(
+                    name="call_function",
+                    response={"error": f"Unknown function: {function_name}"},
+                )
+            ],
+        )
+
+    function_result: str
+    match function_name:
+        case "get_files_info": function_result = get_files_info(WORKING_DIRECTORY, **function_call_part.args) # type: ignore
+        case "get_file_content": function_result = get_file_content(WORKING_DIRECTORY, **function_call_part.args) # type: ignore
+        case "run_python_file": function_result = run_python_file(WORKING_DIRECTORY, **function_call_part.args) # type: ignore
+        case "write_file": function_result = write_file(WORKING_DIRECTORY, **function_call_part.args) # type: ignore
+        case _:
+            return types.Content(
+                role="tool",
+                parts=[
+                    types.Part.from_function_response(
+                        name=function_name,
+                        response={"error": f"Unknown function: {function_name}"},
+                    )
+                ],
+            )
+
+    return types.Content(
+        role="tool",
+        parts=[
+            types.Part.from_function_response(
+                name=function_name,
+                response={"result": function_result},
+            )
+        ],
+    )
 
 
 def main():
@@ -65,7 +114,11 @@ def main():
 
     if response.function_calls:
         for called_function in response.function_calls:
-            print(f"Calling function: {called_function.name}{called_function.args}")
+            function_call_result = call_function(called_function, verbose)
+            try:
+                print(f"-> {function_call_result.parts[0].function_response.response}") # type: ignore
+            except Exception as exc:
+                raise ValueError(f"Invalid result structure for function \"{called_function.name}\"") from exc
     else:
         print(response.text)
 
