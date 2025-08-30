@@ -63,6 +63,9 @@ def call_function(
 def main():
     load_dotenv()
     api_key = os.environ.get("GEMINI_API_KEY")
+    if api_key is None:
+        print("API key not found, you need to specify it in a .env file. See the README for instructions.")
+        sys.exit(1)
 
     verbose = False
     if sys.argv[-1] == "--verbose":
