@@ -25,8 +25,13 @@ Other setup option are available in `config.py`.
 ## Usage
 
 ```sh
-uv run main.py "show me what's in the root directory"
+uv run main.py <prompt> [--verbose]
 ```
+
+Try with these prompts:
+- "show me what's in the root directory"
+- "how does the calculator render results to the console?"
+- "Please fix the bug in the calculator"
 
 ### Run tests
 
