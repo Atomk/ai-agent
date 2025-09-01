@@ -13,12 +13,14 @@ from call_function import (
 
 
 def main():
+    # Load API key
     load_dotenv()
     api_key = os.environ.get("GEMINI_API_KEY")
     if api_key is None:
         print("API key not found, you need to specify it in a .env file. See the README for instructions.")
         sys.exit(1)
 
+    # Parse CLI arguments
     verbose = False
     if sys.argv[-1] == "--verbose":
         verbose = True
@@ -26,7 +28,7 @@ def main():
 
     if len(sys.argv) != 2:
         print("ERROR: you need to provide the prompt as an argument")
-        print("Usage: uv run main.py \"Is this a prompt?\"")
+        print("Usage: uv run main.py \"Is this a prompt?\" [--verbose]")
         sys.exit(1)
 
     prompt = sys.argv[1]
@@ -34,17 +36,15 @@ def main():
         types.Content(role="user", parts=[types.Part(text=prompt)]),
     ]
 
-    # Gemini Client
     client = genai.Client(api_key=api_key)
 
     if verbose:
         print(f"User prompt: {prompt}")
 
     for iteration in range(MAX_ITERATIONS):
-        if iteration > 0:
-            print("\n------------------------------\n")
-
         if verbose:
+            if iteration > 0:
+                print("\n------------------------------\n")
             print("Sending request.")
 
         response = client.models.generate_content(
