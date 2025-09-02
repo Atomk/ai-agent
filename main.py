@@ -32,6 +32,34 @@ def main():
         sys.exit(1)
 
     prompt = sys.argv[1]
+
+    try:
+        response = agent_request(prompt, api_key, verbose)
+    except Exception as exc:
+        raise Exception(f"Agent cannot generate a response: {exc}") from exc
+    print(response)
+
+
+def agent_request(
+    prompt: str,
+    api_key: str,
+    verbose: bool,
+) -> str:
+    """Starts the agent, which will iterate over the user prompt and the result
+    of available functions (called by the agent) until one of these things happen,
+    whichever comes first;
+    - the agent believes it satisfied the user request
+    - the agent concludes it cannot satisfy the user request
+    - the max number of iterations is reached
+
+    Return's the agent final answer, or raises an exception.
+
+    WARNING: Note that the agent is able to use some tools that can edit existing files
+    and execute Python scripts, there are some basic safeguards but the wrong prompt
+    can wreak havoc. You've been warned.
+    """
+    # Will contain all messages in the conversation, which will be provided
+    # with each request to the LLM so it can use the whole thing as context.
     messages: list[types.Content] = [
         types.Content(role="user", parts=[types.Part(text=prompt)]),
     ]
@@ -100,11 +128,10 @@ def main():
         else:
             # This was the final message from the AI, no further action is needed.
             if response.text:
-                print(response.text)
-                break
+                return response.text
 
-    if iteration == MAX_ITERATIONS:
-        print("ERROR: agent loop was terminated due to reaching the iterations limit.")
+    raise Exception("Agent loop was terminated due to reaching the max iterations limit.")
+
 
 if __name__ == "__main__":
     main()
