@@ -27,8 +27,8 @@ When a user asks a question or makes a request, make a function call plan. You c
 - Execute Python files with optional arguments
 - Write or overwrite files
 
-If you are not sure what file or project the user is talking about, you can look at the contents of the root directory to see if that provides enough context to perform the requested action.
 All paths you provide should be relative to the working directory. You do not need to specify the working directory in your function calls as it is automatically injected for security reasons.
+If the user request is not clear enough, before asking for more context use the option "List files and directories" as a first step to understand the contents of the working directory.
 """
 
 
