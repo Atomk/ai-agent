@@ -50,3 +50,11 @@ uv run calculator/tests.py
 $ uv run calculator/main.py "3 + 5 * 2"
 # 3 + 5 = 13
 ```
+
+## Extra credits
+
+Some ideas for some features outside the scope of the guided project that I'd like to add:
+- [ ] Use logging instead of printing
+- [ ] Use `pytest`, plain assertions are more readable than `unittest` methods
+- [ ] API usage DB so you know how much token/request you still have available
+- [ ] `argparse` for argument parsing and `stats` subcommand
