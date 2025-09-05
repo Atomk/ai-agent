@@ -6,6 +6,8 @@ Uses Google's Gemini API through the `google-genai` package`.
 
 This is a guided project part of Boot.dev's curriculum.
 
+Code committed after [this tag](https://github.com/Atomk/ai-agent/tree/guided-project-end) is my own personal additions beyond the scope of Boot.dev's curriculum.
+
 ## Setup
 
 1. Create a virtual environment and install dependencies
@@ -31,7 +33,7 @@ uv run main.py <prompt> [--verbose]
 Try with these prompts:
 - "show me what's in the root directory"
 - "how does the calculator render results to the console?"
-- "Please fix the bug in the calculator"
+- "please fix the bug in the calculator" (after creating a simple bug like changing operator precedence)
 
 ### Run tests
 
@@ -56,5 +58,5 @@ $ uv run calculator/main.py "3 + 5 * 2"
 Some ideas for some features outside the scope of the guided project that I'd like to add:
 - [ ] Use logging instead of printing
 - [ ] Use `pytest`, plain assertions are more readable than `unittest` methods
-- [ ] API usage DB so you know how much token/request you still have available
+- [ ] API usage DB so you can easily see know many token/request you used (and can still use within free plan limits)
 - [ ] `argparse` for argument parsing and `stats` subcommand
