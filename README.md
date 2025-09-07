@@ -58,5 +58,8 @@ $ uv run calculator/main.py "3 + 5 * 2"
 Some ideas for some features outside the scope of the guided project that I'd like to add:
 - [ ] Use logging instead of printing
 - [ ] Use `pytest`, plain assertions are more readable than `unittest` methods
-- [ ] API usage DB so you can easily see know many token/request you used (and can still use within free plan limits)
+- [x] API usage DB so you can easily see know many token/request you used (and can still use within free plan limits)
+    - [ ] Test
+    - [ ] Conversation ID
+    - [ ] Save request
 - [ ] `argparse` for argument parsing and `stats` subcommand

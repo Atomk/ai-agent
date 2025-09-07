@@ -15,3 +15,15 @@ only files and subdirectories located within this directory."""
 MAX_ITERATIONS = 15
 """Maximum number of times the agent can iterate over the results of its actions.
 This helps preventing infinite loops and wasting tokens."""
+
+
+# -------------
+#     STATS
+# -------------
+
+
+STATS_MAX_REQUESTS_PER_DAY = 200
+STATS_MAX_REQUESTS_PER_MINUTE = 15
+STATS_MAX_TOKENS_PER_DAY = 200_000
+
+
