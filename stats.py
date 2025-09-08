@@ -1,6 +1,6 @@
 import sqlite3
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 
 from google.genai import types
 from pydantic import BaseModel
@@ -77,7 +77,7 @@ def add(response_usage: types.GenerateContentResponseUsageMetadata | None):
         return
 
     record = Record(
-        ts=datetime.fromtimestamp(time.time()).isoformat(),
+        ts=datetime.fromtimestamp(time.time(), timezone.utc).isoformat(),
         # TODO implement
         conversation_id=None,
         tokens_prompt=response_usage.prompt_token_count or 0,
