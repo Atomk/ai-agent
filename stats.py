@@ -12,7 +12,6 @@ _DB_NAME = "api_stats.db"
 
 
 class Record(BaseModel):
-    ts: str # datetime in ISO format, local timezone
     conversation_id: int | None
     tokens_prompt: int
     tokens_candidates: int
@@ -41,7 +40,7 @@ class Database:
             cur.execute(
                 """
                 INSERT INTO stats
-                VALUES (:ts, :conversation_id, :tokens_prompt, :tokens_candidates, :tokens_total)
+                VALUES (datetime('now','utc','subsec'), :conversation_id, :tokens_prompt, :tokens_candidates, :tokens_total)
                 """,
                 record.model_dump(),
             )
@@ -77,7 +76,6 @@ def add(response_usage: types.GenerateContentResponseUsageMetadata | None):
         return
 
     record = Record(
-        ts=datetime.fromtimestamp(time.time(), timezone.utc).isoformat(),
         # TODO implement
         conversation_id=None,
         tokens_prompt=response_usage.prompt_token_count or 0,
