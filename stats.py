@@ -93,7 +93,13 @@ def print_usage():
     req_24h = _db.requests_last_24h()
     req_60s = _db.requests_last_minute()
 
+    def percent(current, total) -> str:
+        value = 100 * current / total
+        rounded_one_digit = round(value, 1)
+        # Add spaces at the start do that the percent symbols are aligned
+        return f"{rounded_one_digit}%".rjust(5)
+
     print("Usage stats:")
-    print(f"Tokens:          {round(tok_24h / config.STATS_MAX_TOKENS_PER_DAY, 2)}%    {tok_24h} / {config.STATS_MAX_TOKENS_PER_DAY}")
-    print(f"Requests 24h:    {round(req_24h / config.STATS_MAX_REQUESTS_PER_DAY, 2)}%    {req_24h} / {config.STATS_MAX_REQUESTS_PER_DAY}")
-    print(f"Requests 60s:    {round(req_60s / config.STATS_MAX_REQUESTS_PER_MINUTE, 2)}%    {req_60s} / {config.STATS_MAX_REQUESTS_PER_MINUTE}")
+    print(f"Tokens:          {percent(tok_24h, config.STATS_MAX_TOKENS_PER_DAY)}    {tok_24h} / {config.STATS_MAX_TOKENS_PER_DAY}")
+    print(f"Requests 24h:    {percent(req_24h, config.STATS_MAX_REQUESTS_PER_DAY)}    {req_24h} / {config.STATS_MAX_REQUESTS_PER_DAY}")
+    print(f"Requests 60s:    {percent(req_60s, config.STATS_MAX_REQUESTS_PER_MINUTE)}    {req_60s} / {config.STATS_MAX_REQUESTS_PER_MINUTE}")
