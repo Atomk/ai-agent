@@ -6,9 +6,6 @@ from pydantic import BaseModel
 import config
 
 
-_DB_NAME = "api_stats.db"
-
-
 class Record(BaseModel):
     conversation_id: int | None
     tokens_prompt: int
@@ -18,9 +15,9 @@ class Record(BaseModel):
 
 
 class Database:
-    # TODO pass db name as argument so it's easier to test
-    def __init__(self) -> None:
-        with sqlite3.connect(_DB_NAME) as connection:
+    def __init__(self, db_name) -> None:
+        self._db_name = db_name
+        with sqlite3.connect(self._db_name) as connection:
             cur = connection.cursor()
             cur.execute("""
             CREATE TABLE IF NOT EXISTS stats (
@@ -33,7 +30,7 @@ class Database:
             """)
 
     def add(self, record: Record):
-        with sqlite3.connect(_DB_NAME) as connection:
+        with sqlite3.connect(self._db_name) as connection:
             cur = connection.cursor()
             cur.execute(
                 """
@@ -45,28 +42,28 @@ class Database:
             connection.commit()
 
     def tokens_last_24h(self) -> int:
-        with sqlite3.connect(_DB_NAME) as connection:
+        with sqlite3.connect(self._db_name) as connection:
             cur = connection.cursor()
             cur.execute("SELECT SUM(tokens_total) FROM stats WHERE ts >= datetime('now', 'utc', '-1 days')")
             result = cur.fetchone()
             return result[0] or 0
 
     def requests_last_24h(self) -> int:
-        with sqlite3.connect(_DB_NAME) as connection:
+        with sqlite3.connect(self._db_name) as connection:
             cur = connection.cursor()
             cur.execute("SELECT COUNT(*) FROM stats WHERE ts >= datetime('now', 'utc', '-1 days')")
             result = cur.fetchone()
             return result[0] or 0
 
     def requests_last_minute(self) -> int:
-        with sqlite3.connect(_DB_NAME) as connection:
+        with sqlite3.connect(self._db_name) as connection:
             cur = connection.cursor()
             cur.execute("SELECT COUNT(*) FROM stats WHERE ts >= datetime('now', 'utc', '-1 minutes')")
             result = cur.fetchone()
             return result[0] or 0
 
 
-_db = Database()
+_db = Database(config.STATS_DB_NAME)
 
 
 def add(response_usage: types.GenerateContentResponseUsageMetadata | None):

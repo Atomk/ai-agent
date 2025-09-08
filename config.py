@@ -22,6 +22,7 @@ This helps preventing infinite loops and wasting tokens."""
 # -------------
 
 
+STATS_DB_NAME = "api_stats.db"
 STATS_MAX_REQUESTS_PER_DAY = 200
 STATS_MAX_REQUESTS_PER_MINUTE = 15
 STATS_MAX_TOKENS_PER_DAY = 200_000
