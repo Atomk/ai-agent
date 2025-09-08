@@ -98,6 +98,6 @@ def print_usage():
         return f"{rounded_one_digit}%".rjust(5)
 
     print("Usage stats:")
-    print(f"Tokens:          {percent(tok_24h, config.STATS_MAX_TOKENS_PER_DAY)}    {tok_24h} / {config.STATS_MAX_TOKENS_PER_DAY}")
+    print(f"Tokens 24h:      {percent(tok_24h, config.STATS_MAX_TOKENS_PER_DAY)}    {tok_24h} / {config.STATS_MAX_TOKENS_PER_DAY}")
     print(f"Requests 24h:    {percent(req_24h, config.STATS_MAX_REQUESTS_PER_DAY)}    {req_24h} / {config.STATS_MAX_REQUESTS_PER_DAY}")
     print(f"Requests 60s:    {percent(req_60s, config.STATS_MAX_REQUESTS_PER_MINUTE)}    {req_60s} / {config.STATS_MAX_REQUESTS_PER_MINUTE}")
