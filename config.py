@@ -1,3 +1,5 @@
+# https://ai.google.dev/gemini-api/docs/models#gemini-2.0-flash
+# https://cloud.google.com/vertex-ai/generative-ai/docs/models/gemini/2-0-flash
 MODEL_ID = "gemini-2.0-flash-001"
 
 SUBCOMMAND_TIMEOUT_SECONDS = 30
