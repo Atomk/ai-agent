@@ -35,6 +35,21 @@ Try with these prompts:
 - "how does the calculator render results to the console?"
 - "please fix the bug in the calculator" (after creating a simple bug like changing operator precedence)
 
+#### Stats
+
+Print API usage stats. Configured by default for Gemini API [free plan](https://ai.google.dev/gemini-api/docs/rate-limits#free-tier) for the [2.0 Flash](https://ai.google.dev/gemini-api/docs/pricing#gemini-2.0-flash) model.
+```sh
+uv run main.py stats
+```
+
+Sample output
+```
+Usage stats:
+Tokens 24h:       5.2%    10345 / 200000
+Requests 24h:     5.5%    11 / 200
+Requests 60s:     0.0%    0 / 15
+```
+
 ### Run tests
 
 ```sh
@@ -59,7 +74,8 @@ Some ideas for some features outside the scope of the guided project that I'd li
 - [ ] Use logging instead of printing
 - [ ] Use `pytest`, plain assertions are more readable than `unittest` methods
 - [x] API usage DB so you can easily see know many token/request you used (and can still use within free plan limits)
+    - [x] `stats` subcommand
     - [ ] Test
     - [ ] Conversation ID
-    - [ ] Save request
-- [ ] `argparse` for argument parsing and `stats` subcommand
+    - [ ] Save request prompt/result
+- [ ] `argparse` for argument parsing
