@@ -53,7 +53,10 @@ Requests 60s:     0.0%    0 / 15
 ### Run tests
 
 ```sh
+# Run agent functions tests
 uv run tests.py
+# Run stats module tests
+pytest
 ```
 
 ### Sample project: Calculator
