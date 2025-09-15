@@ -6,16 +6,21 @@ from pydantic import BaseModel, Field
 
 import config
 
-def _now() -> str:
+
+def _now_utc() -> str:
     """Returns the current UTC time in the following format:
-        YYYY-MM-DD HH:MM:SS.SSS
+        YYYY-MM-DD HH:MM:SS.SSSSSS
     Number of subseconds digit may vary.
     """
-    return datetime_to_utc_string(datetime.now())
+    return datetime_to_string(datetime.now(timezone.utc))
 
 
-def datetime_to_utc_string(dt: datetime) -> str:
-    return dt.astimezone(timezone.utc).strftime(r"%F %T.%f")
+def datetime_to_string(dt: datetime) -> str:
+    """Returns a string representing the given datetime object, in the following format:
+        YYYY-MM-DD HH:MM:SS.SSSSSS
+    Number of subseconds digit may vary.
+    """
+    return dt.strftime(r"%F %T.%f")
 
 
 class Record(BaseModel):
@@ -25,7 +30,7 @@ class Record(BaseModel):
     """
     ts: str = Field(
         pattern=r"\d{4}-[01]\d-[0-3]\d \d{2}:\d{2}:\d{2}.\d{3}",
-        default_factory=_now
+        default_factory=_now_utc
     )
     conversation_id: int | None = None
     tokens_prompt: int
