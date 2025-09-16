@@ -78,7 +78,8 @@ Some ideas for some features outside the scope of the guided project that I'd li
 - [ ] Use `pytest`, plain assertions are more readable than `unittest` methods
 - [x] API usage DB so you can easily see know many token/request you used (and can still use within free plan limits)
     - [x] `stats` subcommand
-    - [ ] Test
+    - [x] Test
     - [ ] Conversation ID
     - [ ] Save request prompt/result
 - [ ] `argparse` for argument parsing
+- [ ] Simplify calling main (`uv run main "prompt"`is too many words, maybe with `pyproject.toml` there's a way to install a shell script)
