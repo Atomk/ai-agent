@@ -96,6 +96,11 @@ class TestDatetimeFormatting:
 
     def test_now_conversion(self):
         now_utc = datetime.now(timezone.utc)
-        # All string should match, excluding the subseconds part
-        # This test can easily be flaky due to datetime.now() returning two different timestamps
-        assert _now_utc()[:19] == datetime_to_string(now_utc)[:19]
+        # assert _now_utc()[:19] == datetime_to_string(now_utc)[:19]
+        # Directly comparing output strings would be flaky because actual and expected
+        # will always differ by some subseconds, and truncating the subseconds part is not enough
+        # because one tiny difference may still mean two different minutes, hours, etc.
+        # So we just ensure that the difference is minimal
+        actual = _now_utc()
+        expected = datetime_to_string(now_utc)
+        assert datetime.fromisoformat(actual) - datetime.fromisoformat(expected) < timedelta(milliseconds=50)
