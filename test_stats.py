@@ -6,6 +6,11 @@ from stats import Database, Record, datetime_to_string, _now_utc
 
 @pytest.fixture
 def test_db():
+    # Must use a temp file instead of a in-memory DB, because right now
+    # every method in the Database class creates a new connection
+    # and each connection to an in-memory DB creates a new database.
+    # There's workarounds, but this seems to be the simplest strategy.
+
     # File is automatically deleted on context manager exit
     with tempfile.NamedTemporaryFile() as file:
         yield Database(file.name)
