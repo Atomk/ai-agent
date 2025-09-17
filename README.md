@@ -53,9 +53,6 @@ Requests 60s:     0.0%    0 / 15
 ### Run tests
 
 ```sh
-# Run agent functions tests
-uv run tests.py
-# Run stats module tests
 pytest
 ```
 
@@ -75,7 +72,7 @@ $ uv run calculator/main.py "3 + 5 * 2"
 
 Some ideas for some features outside the scope of the guided project that I'd like to add:
 - [ ] Use logging instead of printing
-- [ ] Use `pytest`, plain assertions are more readable than `unittest` methods
+- [x] Use `pytest`, plain assertions are more readable than `unittest` methods
 - [x] API usage DB so you can easily see know many token/request you used (and can still use within free plan limits)
     - [x] `stats` subcommand
     - [x] Test
