@@ -35,10 +35,28 @@ Try with these prompts:
 - "how does the calculator render results to the console?"
 - "please fix the bug in the calculator" (after creating a simple bug like changing operator precedence)
 
+#### Stats
+
+Print API usage stats. Configured by default for Gemini API [free plan](https://ai.google.dev/gemini-api/docs/rate-limits#free-tier) for the [2.0 Flash](https://ai.google.dev/gemini-api/docs/pricing#gemini-2.0-flash) model.
+```sh
+uv run main.py stats
+```
+
+Sample output
+```
+Usage stats:
+Tokens 24h:       5.2%    10345 / 200000
+Requests 24h:     5.5%    11 / 200
+Requests 60s:     0.0%    0 / 15
+```
+
 ### Run tests
 
 ```sh
+# Run agent functions tests
 uv run tests.py
+# Run stats module tests
+pytest
 ```
 
 ### Sample project: Calculator
@@ -58,5 +76,10 @@ $ uv run calculator/main.py "3 + 5 * 2"
 Some ideas for some features outside the scope of the guided project that I'd like to add:
 - [ ] Use logging instead of printing
 - [ ] Use `pytest`, plain assertions are more readable than `unittest` methods
-- [ ] API usage DB so you can easily see know many token/request you used (and can still use within free plan limits)
-- [ ] `argparse` for argument parsing and `stats` subcommand
+- [x] API usage DB so you can easily see know many token/request you used (and can still use within free plan limits)
+    - [x] `stats` subcommand
+    - [x] Test
+    - [ ] Conversation ID
+    - [ ] Save request prompt/result
+- [ ] `argparse` for argument parsing
+- [ ] Simplify calling main (`uv run main "prompt"`is too many words, maybe with `pyproject.toml` there's a way to install a shell script)

@@ -1,3 +1,5 @@
+# https://ai.google.dev/gemini-api/docs/models#gemini-2.0-flash
+# https://cloud.google.com/vertex-ai/generative-ai/docs/models/gemini/2-0-flash
 MODEL_ID = "gemini-2.0-flash-001"
 
 SUBCOMMAND_TIMEOUT_SECONDS = 30
@@ -15,3 +17,14 @@ only files and subdirectories located within this directory."""
 MAX_ITERATIONS = 15
 """Maximum number of times the agent can iterate over the results of its actions.
 This helps preventing infinite loops and wasting tokens."""
+
+
+# -------------
+#     STATS
+# -------------
+
+
+STATS_DB_NAME = "api_stats.db"
+STATS_MAX_REQUESTS_PER_DAY = 200
+STATS_MAX_REQUESTS_PER_MINUTE = 15
+STATS_MAX_TOKENS_PER_DAY = 200_000

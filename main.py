@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 
+import stats
 from config import MODEL_ID, MAX_ITERATIONS
 from call_function import (
     call_function,
@@ -25,6 +26,10 @@ def main():
     if sys.argv[-1] == "--verbose":
         verbose = True
         sys.argv.pop()
+    # Stats command, should print and exit with no error
+    if sys.argv[1] == "stats":
+        stats.print_usage()
+        return
 
     if len(sys.argv) != 2:
         print("ERROR: you need to provide the prompt as an argument")
@@ -83,6 +88,8 @@ def agent_request(
                 system_instruction=system_prompt,
             )
         )
+
+        stats.add(response.usage_metadata)
 
         if verbose:
             print("Response received.")
