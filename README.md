@@ -61,11 +61,13 @@ pytest
 The agent needs some project to work on, so Boot.dev provides a "calculator" package.
 
 ```sh
+cd src
+
 uv run calculator/tests.py
 # Ran 9 tests in 0.001s
 
 $ uv run calculator/main.py "3 + 5 * 2"
-# 3 + 5 = 13
+# 3 + 5 * 2 = 13
 ```
 
 ## Extra credits
@@ -80,3 +82,5 @@ Some ideas for some features outside the scope of the guided project that I'd li
     - [ ] Save request prompt/result
 - [ ] `argparse` for argument parsing
 - [ ] Simplify calling main (`uv run main "prompt"`is too many words, maybe with `pyproject.toml` there's a way to install a shell script)
+- [x] Move code inside an `src` directory
+- [ ] Fix or remove all TODOs
