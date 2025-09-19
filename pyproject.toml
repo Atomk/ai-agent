@@ -9,3 +9,7 @@ dependencies = [
     "pytest>=8.4.2",
     "python-dotenv==1.1.0",
 ]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+pythonpath = "src"
