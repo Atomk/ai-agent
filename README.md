@@ -80,3 +80,6 @@ Some ideas for some features outside the scope of the guided project that I'd li
     - [ ] Save request prompt/result
 - [ ] `argparse` for argument parsing
 - [ ] Simplify calling main (`uv run main "prompt"`is too many words, maybe with `pyproject.toml` there's a way to install a shell script)
+- [ ] Move code inside an `src` directory
+- [ ] Fix or remove all TODOs
+- [ ] Ability to install this library in any Python project I make so I can use the agent on any codebase
