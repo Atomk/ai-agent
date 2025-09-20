@@ -65,7 +65,7 @@ uv run calculator/tests.py
 # Ran 9 tests in 0.001s
 
 $ uv run calculator/main.py "3 + 5 * 2"
-# 3 + 5 = 13
+# 3 + 5 * 2 = 13
 ```
 
 ## Extra credits
